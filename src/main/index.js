@@ -1,82 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import path, { join } from 'path'
+import { app, shell, BrowserWindow } from 'electron'
+import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico'
-import fs from 'fs'
+import { ipcReq } from './ipcReq'
 
-class TaskDatabase {
-  constructor() {
-    this.dbPath = path.join(app.getPath('userData'), 'tasks.tsk')
-    this.initDatabase()
-  }
-
-  initDatabase() {
-    if (!fs.existsSync(this.dbPath)) {
-      const initialData = {
-        version: '1.0',
-        created: new Date().toISOString(),
-        modified: new Date().toISOString(),
-        tasks: []
-      }
-      fs.writeFileSync(this.dbPath, JSON.stringify(initialData, null, 2))
-    }
-  }
-
-  readTasks() {
-    try {
-      const data = fs.readFileSync(this.dbPath, 'utf8')
-      return JSON.parse(data)
-    } catch (error) {
-      console.error('Error reading tasks:', error)
-      return { tasks: [] }
-    }
-  }
-
-  writeTasks(tasks) {
-    try {
-      const data = this.readTasks()
-      data.tasks = tasks
-      data.modified = new Date().toISOString()
-      fs.writeFileSync(this.dbPath, JSON.stringify(data, null, 2))
-      return { success: true }
-    } catch (error) {
-      console.error('Error writing tasks:', error)
-      return { success: false, error }
-    }
-  }
-
-  addTask(task) {
-    const data = this.readTasks()
-    const newTask = {
-      id: Date.now(),
-      ...task,
-      created: new Date().toISOString()
-    }
-    data.tasks.push(newTask)
-    this.writeTasks(data.tasks)
-    return newTask
-  }
-
-  updateTask(id, updates) {
-    const data = this.readTasks()
-    const taskIndex = data.tasks.findIndex((task) => task.id === id)
-    if (taskIndex !== -1) {
-      data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...updates }
-      this.writeTasks(data.tasks)
-      return data.tasks[taskIndex]
-    }
-    return null
-  }
-
-  deleteTask(id) {
-    const data = this.readTasks()
-    const filteredTasks = data.tasks.filter((task) => task.id !== id)
-    this.writeTasks(filteredTasks)
-    return { success: true }
-  }
-}
-
-const taskDB = new TaskDatabase()
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -86,7 +13,7 @@ function createWindow() {
     show: false,
     frame: false,
     autoHideMenuBar: true,
-    icon: path.join(__dirname, '../../build/icon.ico'),
+    icon: join(__dirname, '../../build/icon.ico'),
     ...(process.platform === 'win' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -125,45 +52,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('close-window', () => {
-    const current = BrowserWindow.getFocusedWindow()
-    if (current) current.close()
-  })
-  ipcMain.on('GoFull-window', () => {
-    const current = BrowserWindow.getFocusedWindow()
-    if (current) current.setFullScreen(true)
-  })
-  ipcMain.on('ExFull-window', () => {
-    const current = BrowserWindow.getFocusedWindow()
-    if (current) current.setFullScreen(false)
-  })
-  ipcMain.on('minimize-window', () => {
-    const current = BrowserWindow.getFocusedWindow()
-    if (current) current.minimize()
-  })
-  ipcMain.handle('get-all-tasks', async () => {
-    const data = taskDB.readTasks()
-    return data.tasks
-  })
-
-  ipcMain.handle('add-task', async (event, taskText) => {
-    const newTask = taskDB.addTask({ text: taskText, completed: false })
-    return newTask
-  })
-
-  ipcMain.handle('update-task', async (event, id, updates) => {
-    const updatedTask = taskDB.updateTask(id, updates)
-    return updatedTask
-  })
-
-  ipcMain.handle('delete-task', async (event, id) => {
-    return taskDB.deleteTask(id)
-  })
-
-  ipcMain.handle('reorder-tasks', async (event, tasks) => {
-    return taskDB.writeTasks(tasks)
-  })
+  ipcReq()
   createWindow()
 
   app.on('activate', function () {
