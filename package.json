@@ -1,7 +1,7 @@
 {
   "name": "task-manager",
   "productName": "Redeemer's Task Manager",
-  "version": "1.1.0.1",
+  "version": "1.1.1",
   "description": "ToDo list made with love an coffee",
   "main": "./out/main/index.js",
   "author": "Mustafa Mohammed",
