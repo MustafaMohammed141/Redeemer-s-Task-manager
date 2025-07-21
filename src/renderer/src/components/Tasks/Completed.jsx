@@ -5,13 +5,19 @@ const Completed = ({ completeTask, delTask, upTask, downTask, tasks }) => {
   return (
     <div>
       {tasks.map((task, index) => {
+        console.log(task)
+
         if (task.completed) {
           return (
             <li key={task?.id} className=" m-3 p-3 transition-all ">
               <div className="flex  items-center">
-                <span className=" px-2.5 text-2xl flex-1 text-gray-400 line-through ">
-                  {task?.text || ''}
-                </span>
+                {' '}
+                <div className=" flex-1">
+                  <p className=" px-2.5 text-2xl  text-gray-400 line-through ">
+                    {task?.text || ''}
+                  </p>
+                  <p className=" px-2.5 text-[12px] text-gray-400">Done at: {task?.done || ''}</p>
+                </div>
                 <button
                   className="border-[2px] font-semibold text-lg rounded-md p-1 bg-green-500 hover:bg-green-600 hover:cursor-pointer active:bg-green-800 mr-3 w-10 h-10 flex items-center justify-center"
                   onClick={() => {

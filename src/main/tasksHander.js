@@ -48,7 +48,8 @@ class TaskDatabase {
     const newTask = {
       id: Date.now(),
       ...task,
-      created: new Date().toISOString()
+      created: new Date().toLocaleString(),
+      done: ''
     }
     data.tasks.push(newTask)
     this.writeTasks(data.tasks)
@@ -59,7 +60,10 @@ class TaskDatabase {
     const data = this.readTasks()
     const taskIndex = data.tasks.findIndex((task) => task.id === id)
     if (taskIndex !== -1) {
-      data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...updates }
+      data.tasks[taskIndex] = {
+        ...data.tasks[taskIndex],
+        ...updates
+      }
       this.writeTasks(data.tasks)
       return data.tasks[taskIndex]
     }

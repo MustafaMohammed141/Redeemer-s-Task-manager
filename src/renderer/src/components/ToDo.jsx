@@ -26,7 +26,7 @@ const ToDoList = () => {
   }
   const completeTask = async (index) => {
     const task = tasks[index]
-    const updt = { ...task, completed: !task.completed }
+    const updt = { ...task, completed: !task.completed, done: new Date().toLocaleString() }
     await window.electron.ipcRenderer.invoke('update-task', task.id, updt)
 
     const updtArr = tasks.map((t, i) => {
