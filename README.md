@@ -61,6 +61,7 @@ Want to share this with friends? Here's how:
 ```bash
 npm run build:win
 ```
+#### Or you can save your time and just download the release [here](https://github.com/MustafaMohammed141/Redeemer-s-Task-manager/releases/)
 
 ### macOS 🍎
 ```bash
@@ -70,22 +71,6 @@ npm run build:mac
 ### Linux 🐧
 ```bash
 npm run build:linux
-```
-
-## File Structure 📁
-
-```
-src/
-├── main/           # Electron main process
-│   └── index.js    # Main app logic + task database
-├── preload/        # Preload scripts
-│   └── index.js    # IPC bridge
-└── renderer/       # React frontend
-    └── src/
-        ├── components/
-        │   ├── ToDo.jsx    # Main task list component
-        │   └── TopBar.jsx  # Custom window controls
-        └── App.jsx         # Main app component
 ```
 
 ## How It Works 🔧
