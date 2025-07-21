@@ -4,18 +4,16 @@ import { Check } from 'lucide-react'
 const Completed = ({ completeTask, delTask, upTask, downTask, tasks }) => {
   return (
     <div>
-      {' '}
-      <h2 className="text-4xl">completed tasks</h2>
       {tasks.map((task, index) => {
         if (task.completed) {
           return (
-            <li key={task?.id} className="border-1 m-3 p-3 border-[hsla(0,0%,50%,1)]">
-              <div className="flex ">
+            <li key={task?.id} className=" m-3 p-3 transition-all ">
+              <div className="flex  items-center">
                 <span className=" px-2.5 text-2xl flex-1 text-gray-400 line-through ">
                   {task?.text || ''}
                 </span>
                 <button
-                  className="border-[2px] font-semibold text-lg rounded-md p-1 bg-red-500 hover:bg-red-600 hover:cursor-pointer active:bg-red-800 mr-3 w-9 h-9"
+                  className="border-[2px] font-semibold text-lg rounded-md p-1 bg-green-500 hover:bg-green-600 hover:cursor-pointer active:bg-green-800 mr-3 w-10 h-10 flex items-center justify-center"
                   onClick={() => {
                     completeTask(index)
                   }}

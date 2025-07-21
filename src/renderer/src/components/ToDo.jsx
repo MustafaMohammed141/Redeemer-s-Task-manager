@@ -82,26 +82,35 @@ const ToDoList = () => {
             Add task
           </button>
         </div>
-        <div className="flex justify-center gap-2 w-full select-none">
-          <button
-            className={tab ? 'hover:cursor-pointer rounded-md' : 'cursor-auto text-gray-400'}
-            onClick={() => {
-              if (tab) return handleTab()
-            }}
-          >
-            on going
-          </button>
-          /
-          <button
-            className={!tab ? 'hover:cursor-pointer rounded-md' : 'cursor-auto text-gray-400'}
-            onClick={() => {
-              if (!tab) return handleTab()
-            }}
-          >
-            completed
-          </button>
+        <div className="flex justify-center items-center w-full select-none">
+          <div className=" text-2xl border-2 border-black flex gap-9 p-3 bg-gray-800 rounded-4xl">
+            <button
+              className={
+                tab
+                  ? 'hover:cursor-pointer rounded-4xl p-2 transition-all transform-[]'
+                  : 'cursor-auto bg-white rounded-4xl p-2 text-black transition-all'
+              }
+              onClick={() => {
+                if (tab) return handleTab()
+              }}
+            >
+              on going
+            </button>
+            <button
+              className={
+                !tab
+                  ? 'hover:cursor-pointer rounded-4xl p-2 transition-all'
+                  : 'cursor-auto bg-white rounded-4xl p-2 text-black transition-all'
+              }
+              onClick={() => {
+                if (!tab) return handleTab()
+              }}
+            >
+              completed
+            </button>
+          </div>
         </div>
-        <ol className="list-decimal ml-15 text-4xl font-bold max-w-3xl ">
+        <ol className="list-decimal ml-15 text-4xl font-bold max-w-3xl transition-all">
           {tab ? (
             <Completed
               tasks={tasks}

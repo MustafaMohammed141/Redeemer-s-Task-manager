@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.Redeemer.ToDoList
 productName: Redeemer's Task manager
 directories:
   buildResources: build
