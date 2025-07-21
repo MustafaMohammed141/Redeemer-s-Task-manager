@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
-
+import Completed from './Tasks/completed'
+import Incompleted from './Tasks/incompleted'
 const ToDoList = () => {
   const [tasks, setTasks] = useState([])
+  const [tab, setTab] = useState(false)
   const [newTasks, setNewTasks] = useState('')
-
-  useEffect(() => {
-    loadTasks()
-  }, [])
 
   const loadTasks = async () => {
     const allTasks = await window.electron.ipcRenderer.invoke('get-all-tasks')
@@ -16,7 +14,9 @@ const ToDoList = () => {
   const handleInput = (e) => {
     setNewTasks(e.target.value)
   }
-
+  const handleTab = () => {
+    setTab(!tab)
+  }
   const addTask = async () => {
     if (newTasks.trim() !== '') {
       const newTask = await window.electron.ipcRenderer.invoke('add-task', newTasks)
@@ -24,7 +24,16 @@ const ToDoList = () => {
       setNewTasks('')
     }
   }
+  const completeTask = async (index) => {
+    const task = tasks[index]
+    const updt = { ...task, completed: !task.completed }
+    await window.electron.ipcRenderer.invoke('update-task', task.id, updt)
 
+    const updtArr = tasks.map((t, i) => {
+      return i === index ? updt : t
+    })
+    setTasks(updtArr)
+  }
   const delTask = async (index) => {
     const taskToDelete = tasks[index]
     await window.electron.ipcRenderer.invoke('delete-task', taskToDelete.id)
@@ -49,6 +58,9 @@ const ToDoList = () => {
       await window.electron.ipcRenderer.invoke('reorder-tasks', updt)
     }
   }
+  useEffect(() => {
+    loadTasks()
+  }, [])
 
   return (
     <div className="justify-center flex pt-10 text-blue-100 ">
@@ -64,46 +76,49 @@ const ToDoList = () => {
             onKeyPress={(e) => e.key === 'Enter' && addTask()}
           />
           <button
-            className="border-[2px] rounded-md p-1 bg-green-500 hover:bg-green-600 hover:cursor-pointer active:bg-green-800"
+            className="border-[2px] hover:cursor-pointer rounded-md p-1 bg-green-500 hover:bg-green-600  active:bg-green-800"
             onClick={addTask}
           >
             Add task
           </button>
         </div>
+        <div className="flex justify-center gap-2 w-full select-none">
+          <button
+            className={tab ? 'hover:cursor-pointer rounded-md' : 'cursor-auto text-gray-400'}
+            onClick={() => {
+              if (tab) return handleTab()
+            }}
+          >
+            on going
+          </button>
+          /
+          <button
+            className={!tab ? 'hover:cursor-pointer rounded-md' : 'cursor-auto text-gray-400'}
+            onClick={() => {
+              if (!tab) return handleTab()
+            }}
+          >
+            completed
+          </button>
+        </div>
         <ol className="list-decimal ml-15 text-4xl font-bold max-w-3xl ">
-          {tasks.map((task, index) => {
-            return (
-              <li key={task.id} className="border-1 m-3 p-3 border-[hsla(0,0%,50%,1)]">
-                <div className="flex ">
-                  <span className="font-semibold px-2.5 text-2xl flex-1 ">{task.text || task}</span>
-                  <button
-                    className="border-[2px] font-semibold text-lg rounded-md p-1 bg-red-500 hover:bg-red-600 hover:cursor-pointer active:bg-red-800 mr-3"
-                    onClick={() => {
-                      delTask(index)
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="border-[2px] font-semibold text-lg rounded-md p-1 bg-cyan-500 hover:bg-cyan-600 hover:cursor-pointer active:bg-cyan-800 mr-3"
-                    onClick={() => {
-                      upTask(index)
-                    }}
-                  >
-                    Move Up
-                  </button>
-                  <button
-                    className="border-[2px] font-semibold text-lg rounded-md p-1 bg-indigo-500 hover:bg-indigo-600 hover:cursor-pointer active:bg-indigo-800 mr-3"
-                    onClick={() => {
-                      downTask(index)
-                    }}
-                  >
-                    Move Down
-                  </button>
-                </div>
-              </li>
-            )
-          })}
+          {tab ? (
+            <Completed
+              tasks={tasks}
+              completeTask={completeTask}
+              delTask={delTask}
+              upTask={upTask}
+              downTask={downTask}
+            />
+          ) : (
+            <Incompleted
+              tasks={tasks}
+              completeTask={completeTask}
+              delTask={delTask}
+              upTask={upTask}
+              downTask={downTask}
+            />
+          )}
         </ol>
       </div>
     </div>
