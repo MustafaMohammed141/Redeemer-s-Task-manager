@@ -1,7 +1,7 @@
 {
   "name": "task-manager",
   "productName": "Redeemer's Task Manager",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "ToDo list made with love an coffee",
   "main": "./out/main/index.js",
   "author": "Mustafa Mohammed",
@@ -22,6 +22,7 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.1.11",
+    "auto-launch": "^5.0.6",
     "lucide-react": "^0.525.0",
     "tailwindcss": "^4.1.11"
   },

@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.ico'
 import { ipcReq } from './ipcReq'
-
+import AutoLaunch from 'auto-launch'
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -51,7 +51,8 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
+  const onStartup = new AutoLaunch({ name: 'TaskManager', path: process.execPath })
+  onStartup.enable()
   ipcReq()
   createWindow()
 
