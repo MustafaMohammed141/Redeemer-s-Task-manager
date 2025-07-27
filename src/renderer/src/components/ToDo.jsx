@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import Completed from './Tasks/completed'
+import Completed from './Tasks/Completed'
 import Incompleted from './Tasks/incompleted'
 const ToDoList = () => {
   const [tasks, setTasks] = useState([])
   const [tab, setTab] = useState(false)
   const [newTasks, setNewTasks] = useState('')
+
+  const buttonStyle =
+    'border-[2px] font-semibold text-lg rounded-md p-1 mr-3 w-10 h-10 flex items-center justify-center border-white'
 
   const loadTasks = async () => {
     const allTasks = await window.electron.ipcRenderer.invoke('get-all-tasks')
@@ -110,7 +113,7 @@ const ToDoList = () => {
             </button>
           </div>
         </div>
-        <ol className="list-decimal ml-15 text-4xl font-bold max-w-3xl transition-all">
+        <ul className=" ml-15 text-4xl font-bold max-w-3xl transition-all">
           {tab ? (
             <Completed
               tasks={tasks}
@@ -118,6 +121,7 @@ const ToDoList = () => {
               delTask={delTask}
               upTask={upTask}
               downTask={downTask}
+              buttonStyle={buttonStyle}
             />
           ) : (
             <Incompleted
@@ -126,9 +130,10 @@ const ToDoList = () => {
               delTask={delTask}
               upTask={upTask}
               downTask={downTask}
+              buttonStyle={buttonStyle}
             />
           )}
-        </ol>
+        </ul>
       </div>
     </div>
   )
