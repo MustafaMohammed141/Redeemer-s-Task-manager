@@ -24,54 +24,8 @@ This is a simple but effective desktop task manager app. No fancy cloud sync, no
 - **Vite** - Fast builds, faster development
 - **Lucide React** - Icons that don't suck
 
-## Getting Started 🚀
 
-### Prerequisites
-- Node.js (obviously)
-- npm or yarn or pnpm (whatever floats your boat)
-
-### Installation
-
-1. Clone this bad boy:
-```bash
-git clone <your-repo-url>
-cd task-manager
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start developing:
-```bash
-npm run dev
-```
-
-4. Build for production:
-```bash
-npm run build
-```
-
-## Building Distributables 📦
-
-Want to share this with friends? Here's how:
-
-### Windows 🪟
-```bash
-npm run build:win
-```
 #### Or you can save your time and just download the release [here](https://github.com/MustafaMohammed141/Redeemer-s-Task-manager/releases/)
-
-### macOS 🍎
-```bash
-npm run build:mac
-```
-
-### Linux 🐧
-```bash
-npm run build:linux
-```
 
 ## How It Works 🔧
 
